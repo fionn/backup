@@ -1,0 +1,51 @@
+# vim: ft=systemd
+
+[Unit]
+Description=Borg backup for %l:~/
+After=network.target
+ConditionACPower=true
+
+[Service]
+Type=oneshot
+
+Environment=BORG_REPO=user@host:backup/borg/%l.home.%u
+Environment=BORG_PASSCOMMAND="cat %h/.config/borg/password"
+Environment=BORG_REMOTE_PATH=borg1
+
+ExecStart=systemd-inhibit --who="borg" --why="Creating scheduled backup" \
+    borg create \
+    --info \
+    --stats \
+    --compression=zstd,10 \
+    --exclude-caches \
+    --one-file-system \
+    ::{now:%%Y%%m%%d%%Z%%H%%M%%S} \
+    %h
+
+ExecStart=borg check \
+    --info \
+    --verify-data \
+    --save-space \
+
+ExecStart=borg prune \
+    --info \
+    --keep-within 7d \
+    --keep-daily 15 \
+    --keep-weekly 4 \
+    --keep-monthly 12 \
+    --keep-yearly 10 \
+
+Nice=19
+IOSchedulingClass=idle
+CPUSchedulingPolicy=batch
+IOSchedulingPriority=7
+
+ProtectHome=read-only
+SystemCallArchitectures=native
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+UMask=0777
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+SystemCallFilter=~@privileged @resources

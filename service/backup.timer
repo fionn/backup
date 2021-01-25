@@ -1,0 +1,12 @@
+# vim: ft=systemd
+
+[Unit]
+Description=Borg backup timer for %l:~/
+
+[Timer]
+Persistent=true
+OnCalendar=*-*-* 20:00
+RandomizedDelaySec=20min
+
+[Install]
+WantedBy=timers.target
