@@ -8,7 +8,7 @@ ConditionACPower=true
 [Service]
 Type=oneshot
 
-Environment=BORG_REPO=user@host:backup/borg/%l.home.%u
+Environment=BORG_REPO=borg-host:backup/borg/%l.home.%u
 Environment=BORG_PASSCOMMAND="cat %h/.config/borg/password"
 Environment=BORG_REMOTE_PATH=borg1
 
