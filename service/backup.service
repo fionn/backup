@@ -14,6 +14,7 @@ Environment=BORG_REMOTE_PATH=borg1
 
 ExecStart=systemd-inhibit --who="borg" --why="Creating scheduled backup" \
     borg create \
+    --show-version \
     --info \
     --stats \
     --compression=zstd,10 \
@@ -24,8 +25,7 @@ ExecStart=systemd-inhibit --who="borg" --why="Creating scheduled backup" \
 
 ExecStart=borg check \
     --info \
-    --verify-data \
-    --save-space \
+    --save-space
 
 ExecStart=borg prune \
     --info \
@@ -33,7 +33,7 @@ ExecStart=borg prune \
     --keep-daily 15 \
     --keep-weekly 4 \
     --keep-monthly 12 \
-    --keep-yearly 10 \
+    --keep-yearly 10
 
 Nice=19
 IOSchedulingClass=idle
