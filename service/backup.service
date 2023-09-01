@@ -41,6 +41,7 @@ CPUSchedulingPolicy=batch
 IOSchedulingPriority=7
 
 ProtectHome=read-only
+ReadWriteDirectories=%h/.cache/borg %h/.config/borg/security
 SystemCallArchitectures=native
 LockPersonality=true
 MemoryDenyWriteExecute=true
